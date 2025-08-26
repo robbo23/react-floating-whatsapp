@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useCallback, useRef, useMemo } from 'react'
 import { reducer } from '../reducer'
 import { WhatsappSVG, CloseSVG, CheckSVG, SendSVG } from './Icons'
-import css from '../styles.module.css'
+import '../tailwind.css'
 
 import darkBG from './assets/bg-chat-tile-light.png'
 import lightBG from './assets/bg-chat-tile-dark.png'
@@ -208,55 +208,57 @@ export function FloatingWhatsApp({
   }, [allowEsc, isOpen, handleClose])
 
   return (
-    <div className={`${css.floatingWhatsapp} ${darkMode ? `${css.dark} ` : ''} ${className}`} style={style}>
+    <div className={`w-full h-full text-left relative font-sans ${darkMode ? 'dark ' : ''}${className}`} style={style}>
       <div
-        className={`${css.whatsappButton} ${buttonClassName}`}
+        className={`w-[60px] h-[60px] flex justify-center items-center fixed bottom-8 right-8 cursor-pointer bg-whatsapp-green rounded-full select-none shadow-lg z-[9998] relative ${buttonClassName}`}
         onClick={handleOpen}
         style={buttonStyle}
         aria-hidden='true'
       >
+        <div className="absolute inset-0 rounded-full animate-pulse-whatsapp"></div>
         <WhatsappSVG />
         {isNotification && (
-          <span className={`${css.notificationIndicator} ${notificationClassName}`} style={notificationStyle}>
+          <span className={`flex flex-wrap justify-center items-center absolute box-border font-inherit font-medium text-xs min-w-5 leading-none px-1.5 h-5 rounded-lg z-[1] transition-transform duration-200 ease-in-out bg-red-600 text-white top-0 right-2.5 transform scale-100 translate-x-1/2 -translate-y-1/2 origin-top-right ${notificationClassName}`} style={notificationStyle}>
             1
           </span>
         )}
       </div>
 
       <div
-        className={`${css.whatsappChatBox} ${isOpen ? css.open : css.close} ${chatboxClassName}`}
+        className={`flex flex-col justify-between rounded-lg overflow-hidden bg-white touch-auto fixed bottom-28 right-16 w-96 opacity-0 transition-all duration-200 ease-out shadow-lg z-[9999] max-[575px]:right-0 max-[575px]:left-0 max-[575px]:max-w-[90%] max-[575px]:mx-auto ${isOpen ? 'animate-bounce-in' : 'animate-bounce-out'} ${chatboxClassName}`}
         onClick={(event) => event.stopPropagation()}
         aria-hidden='true'
         style={{ height: isOpen ? chatboxHeight : 0, ...chatboxStyle }}
       >
-        <header className={css.chatHeader}>
-          <div className={css.avatar}>
-            <img src={avatar} width='60' height='60' alt='whatsapp-avatar' />
+        <header className="bg-whatsapp-dark grid items-center p-1 grid-cols-[20%_60%_1fr] gap-[1%]">
+          <div className="p-1 relative">
+            <img src={avatar} width='60' height='60' alt='whatsapp-avatar' className="align-middle rounded-full h-[60px] w-[60px] border border-white/50" />
+            <div className="absolute w-2.5 h-2.5 bg-whatsapp-light border border-white rounded-full bottom-1 right-2"></div>
           </div>
-          <div className={css.status}>
-            <span className={css.statusTitle}>{accountName}</span>
-            <span className={css.statusSubtitle}>{statusMessage}</span>
+          <div className="text-white flex flex-col p-2">
+            <span className="text-base font-bold">{accountName}</span>
+            <span className="text-sm text-gray-100">{statusMessage}</span>
           </div>
-          <div className={css.close} onClick={handleClose} aria-hidden='true'>
+          <div className="p-4 cursor-pointer text-center" onClick={handleClose} aria-hidden='true'>
             <CloseSVG />
           </div>
         </header>
 
-        <div className={css.chatBody} style={{ backgroundImage: `url(${darkMode ? darkBG : lightBG})` }}>
+        <div className={`p-5 bg-cover bg-repeat max-h-96 h-full opacity-90 ${darkMode ? 'bg-gray-900' : 'bg-stone-200'}`} style={{ backgroundImage: `url(${darkMode ? darkBG : lightBG})` }}>
           {isDelay ? (
-            <div className={css.chatBubble}>
-              <div className={css.typing}>
-                <div className={css.dot} />
-                <div className={css.dot} />
-                <div className={css.dot} />
+            <div className={`inline-block p-4 px-7 rounded-2xl rounded-bl-sm ${darkMode ? 'bg-gray-700' : 'bg-green-50'}`}>
+              <div className="flex items-center h-4">
+                <div className={`animate-typing rounded-full h-1.5 w-1.5 mr-1 align-middle inline-block typing-dot-1 ${darkMode ? 'bg-green-300/70' : 'bg-green-800/70'}`} />
+                <div className={`animate-typing rounded-full h-1.5 w-1.5 mr-1 align-middle inline-block typing-dot-2 ${darkMode ? 'bg-green-300/70' : 'bg-green-800/70'}`} />
+                <div className={`animate-typing rounded-full h-1.5 w-1.5 mr-0 align-middle inline-block typing-dot-3 ${darkMode ? 'bg-green-300/70' : 'bg-green-800/70'}`} />
               </div>
             </div>
           ) : (
-            <div className={css.message}>
-              <span className={css.triangle} />
-              <span className={css.accountName}>{accountName}</span>
-              <p className={css.messageBody}>{chatMessage}</p>
-              <span className={css.messageTime}>
+            <div className={`py-1.5 px-3.5 pb-1.5 rounded-tr-lg rounded-b-lg relative max-w-[calc(100%-120px)] z-[2] shadow-sm ${darkMode ? 'bg-teal-700 shadow-black/70' : 'bg-white shadow-black/13'}`}>
+              <span className={`inline-block absolute -left-2.5 top-0 triangle-left ${darkMode ? 'triangle-left-dark' : ''}`} />
+              <span className={`text-xs font-bold leading-4 ${darkMode ? 'text-white/50' : 'text-black/50'}`}>{accountName}</span>
+              <p className={`text-sm leading-5 mt-1 whitespace-pre-wrap ${darkMode ? 'text-gray-100/90' : 'text-black'}`}>{chatMessage}</p>
+              <span className={`flex mt-1 text-xs leading-4 justify-end ${darkMode ? 'text-white/50' : 'text-black/50'}`}>
                 {timeNow}
                 <span style={{ marginLeft: 5 }}>
                   <CheckSVG />
@@ -266,10 +268,10 @@ export function FloatingWhatsApp({
           )}
         </div>
 
-        <footer className={css.chatFooter}>
-          <form onSubmit={handleSubmit}>
-            <input className={css.input} placeholder={placeholder} ref={inputRef} dir='auto' />
-            <button type='submit' className={css.buttonSend}>
+        <footer className={`p-1 ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <form onSubmit={handleSubmit} className="grid items-center grid-cols-[85%_15%] p-1">
+            <input className={`rounded-2xl px-2.5 border-none min-h-[45px] transition-shadow duration-200 ease-in-out placeholder-gray-500 focus:outline-none focus:shadow-[0_0_0_1px_rgb(7_94_84_/_50%)] ${darkMode ? 'bg-gray-700 text-gray-100 focus:border-teal-500 focus:shadow-[0_0_0_1px_rgb(13_168_150_/_50%)]' : 'bg-white border-whatsapp-dark'}`} placeholder={placeholder} ref={inputRef} dir='auto' />
+            <button type='submit' className="bg-transparent border-0 cursor-pointer disabled:pointer-events-none disabled:opacity-50">
               <SendSVG />
             </button>
           </form>
