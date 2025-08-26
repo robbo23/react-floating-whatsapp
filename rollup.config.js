@@ -4,7 +4,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
-import tailwindcss from '@tailwindcss/postcss'
+import tailwindcss from 'tailwindcss'
 import terser from '@rollup/plugin-terser'
 import url from '@rollup/plugin-url'
 
