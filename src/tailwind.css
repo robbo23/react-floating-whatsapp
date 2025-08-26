@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom utility classes */
+@layer utilities {
+  .typing-dot-1 {
+    animation-delay: 200ms;
+  }
+  
+  .typing-dot-2 {
+    animation-delay: 300ms;
+  }
+  
+  .typing-dot-3 {
+    animation-delay: 400ms;
+  }
+  
+  .triangle-left {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 20px 20px 0;
+    border-color: transparent white transparent transparent;
+  }
+  
+  .triangle-left-dark {
+    border-color: transparent #056162 transparent transparent;
+  }
+}

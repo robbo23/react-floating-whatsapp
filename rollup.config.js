@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
+import tailwindcss from 'tailwindcss'
 import terser from '@rollup/plugin-terser'
 import url from '@rollup/plugin-url'
 
@@ -17,7 +18,9 @@ export default {
     commonjs(),
     resolve(),
     postcss({
-      plugins: [autoprefixer()]
+      plugins: [tailwindcss(), autoprefixer()],
+      extract: true,
+      minimize: true
     }),
     url({
       include: ['**/*.svg', '**/*.png', '**/*.jp(e)?g', '**/*.mp3', '**/*.webp'],
